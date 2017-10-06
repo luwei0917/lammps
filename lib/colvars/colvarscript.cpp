@@ -204,6 +204,8 @@ int colvarscript::run(int objc, unsigned char *const objv[])
     proxy->output_prefix() = obj_to_str(objv[2]);
     int error = 0;
     error |= colvars->setup_output();
+    error |= colvars->write_restart_file(colvars->output_prefix()+
+                                         ".colvars.state");
     error |= colvars->write_output_files();
     return error ? COLVARSCRIPT_ERROR : COLVARS_OK;
   }
@@ -295,7 +297,9 @@ int colvarscript::proc_colvar(colvar *cv, int objc, unsigned char *const objv[])
     // colvar destructor is tasked with the cleanup
     delete cv;
     // TODO this could be done by the destructors
-    colvars->write_traj_label(*(colvars->cv_traj_os));
+    if (colvars->cv_traj_os != NULL) {
+      colvars->write_traj_label(*(colvars->cv_traj_os));
+    }
     return COLVARS_OK;
   }
 
@@ -374,7 +378,6 @@ int colvarscript::proc_colvar(colvar *cv, int objc, unsigned char *const objv[])
 
 int colvarscript::proc_bias(colvarbias *b, int objc, unsigned char *const objv[]) {
 
-  std::string const key(obj_to_str(objv[0]));
   std::string const subcmd(obj_to_str(objv[2]));
 
   if (subcmd == "energy") {
@@ -425,7 +428,9 @@ int colvarscript::proc_bias(colvarbias *b, int objc, unsigned char *const objv[]
     // the bias destructor takes care of the cleanup at cvm level
     delete b;
     // TODO this could be done by the destructors
-    colvars->write_traj_label(*(colvars->cv_traj_os));
+    if (colvars->cv_traj_os != NULL) {
+      colvars->write_traj_label(*(colvars->cv_traj_os));
+    }
     return COLVARS_OK;
   }
 
@@ -538,7 +543,7 @@ Managing the Colvars module:\n\
   config <string>             -- read configuration from the given string\n\
   reset                       -- delete all internal configuration\n\
   delete                      -- delete this Colvars module instance\n\
-  version                     -- return version of colvars code\n\
+  version                     -- return version of Colvars code\n\
   \n\
 Input and output:\n\
   list                        -- return a list of all variables\n\
@@ -564,6 +569,8 @@ Accessing collective variables:\n\
   colvar <name> type          -- return the type of colvar <name>\n\
   colvar <name> delete        -- delete colvar <name>\n\
   colvar <name> addforce <F>  -- apply given force on colvar <name>\n\
+  colvar <name> getappliedforce -- return applied force of colvar <name>\n\
+  colvar <name> gettotalforce -- return total force of colvar <name>\n\
   colvar <name> getconfig     -- return config string of colvar <name>\n\
   colvar <name> cvcflags <fl> -- enable or disable cvcs according to 0/1 flags\n\
   colvar <name> get <f>       -- get the value of the colvar feature <f>\n\
