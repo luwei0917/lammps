@@ -46,7 +46,7 @@ class FixBackbone : public Fix {
 public:
   // Global energy scale
   double epsilon;
-  
+
   // Backbone parameters
   double k_chain[3], k_shake, k_chi, k_rama;
   double k_excluded_C, k_excluded_O;
@@ -58,15 +58,15 @@ public:
   static const int i_rp = 6; // Where Proline rama parametors start
   bool ssweight[12];
   double w[12], sigma[12], phiw[12], phi0[12], psiw[12], psi0[12], *aps[12];
-  
+
   // Hydrogen bonding parameters
   double hbscl[4][9], sigma_NO, sigma_HO, NO_zero, HO_zero;
   double k_dssp, dssp_hdrgn_cut, pref[2], d_nu0;
-  
+
   // P_AP Liquid Crystal potential parameters
   double k_global_P_AP, k_betapred_P_AP, k_P_AP[3], P_AP_pref, P_AP_cut;
   int i_diff_P_AP, i_med_max, i_med_min;
-  
+
   // Water mediated interactions parameters
   double m_anti_HB[20][20][2], m_anti_NHB[20][20][2], m_para_HB[20][20][2];
   double m_para_one[20], m_anti_one[20];
@@ -74,7 +74,7 @@ public:
   double well_r_min[5], well_r_max[5], treshold, water_kappa, water_kappa_sigma, burial_kappa;
   double water_gamma[5][20][20][2];
   int well_flag[5], n_wells, contact_cutoff;
-  
+
   // Phosphorylation via hypercharged glutamate interaction
   double phosph_water_gamma[5][20][20][2];
   double k_hypercharge;
@@ -85,7 +85,7 @@ public:
   double k_burial;
   double burial_ro_min[3], burial_ro_max[3];
   double burial_gamma[20][3];
-  
+
   // Helical hydrogen bonding parameters
   double k_helix, helix_gamma_p, helix_gamma_w, h4prob[20];
   double helix_kappa, helix_kappa_sigma, helix_treshold, helix_cutoff;
@@ -94,7 +94,7 @@ public:
   int helix_well_flag[5], n_helix_wells, helix_i_diff;
   int pro_accepter_flag;
   double h4prob_pro_accepter;
-  
+
   // Non-additive AMH-Go parameters
   double k_amh_go, amh_go_rc;
   double amh_go_p;
@@ -103,7 +103,7 @@ public:
   double **amh_go_force;
   int *amh_go_force_map;
   double *amh_go_norm;
-  
+
   // Fragment Memory parameters
   double k_frag_mem;
   int n_frag_mems, **frag_mem_map, *ilen_fm_map;
@@ -112,19 +112,19 @@ public:
   char frag_mems_file[100];
   char fm_gamma_file[100];
   double fm_sigma_exp;
-  
+
   // Table Fragment Memory parameters
   TBV **fm_table;
   int tb_size, tb_nbrs;
   double tb_rmin, tb_rmax, tb_dr;
-  
+
   // Vector Fragment Memory
   double k_vec_frag_mem;
   double vfm_sigma, vfm_sigma_sq;
   double frag_table_well_width;
   int fm_energy_debug_flag;
 
-  
+
   // Table Vector Fragment Memory
   TBV **vfm_table;
   int vfm_tb_size;
@@ -144,7 +144,7 @@ public:
   int nlevels_respa;
   bool allocated;
   class NeighList *list;         // standard neighbor list used by most pairs
-  
+
   int ntimestep;
   int n, nn; // n is the total number of residues, nn is the local number of residues
   double an, bn, cn, ap, bp, cp, ah, bh, ch;
@@ -162,22 +162,22 @@ public:
   bool ssweight_flag, dssp_hdrgn_flag, p_ap_flag, water_flag, burial_flag, helix_flag, amh_go_flag, frag_mem_flag, ssb_flag;
   bool phosph_flag;
   bool frag_mem_tb_flag, vec_frag_mem_flag, vec_frag_mem_tb_flag;
-  
+
   enum Atoms{CA0 = 0, CA1, CA2, O0, O1, nAtoms};
   enum Angles{PHI = 0, PSI, nAngles};
   enum ResInfo{NONE=0, LOCAL, GHOST, OFF};
-  
+
   char *se; // Protein sequance
   int nch, ch_len[100], ch_pos[100];
-  
+
   double energy[15], energy_all[15];
-  enum EnergyTerms{ET_TOTAL=0, ET_CHAIN, ET_SHAKE, ET_CHI, ET_RAMA, ET_VEXCLUDED, ET_DSSP, ET_PAP, 
+  enum EnergyTerms{ET_TOTAL=0, ET_CHAIN, ET_SHAKE, ET_CHI, ET_RAMA, ET_VEXCLUDED, ET_DSSP, ET_PAP,
                     ET_WATER, ET_BURIAL, ET_HELIX, ET_AMHGO, ET_FRAGMEM, ET_VFRAGMEM, ET_SSB, nEnergyTerms};
-  
+
   double ctime[15], previous_time;
-  enum ComputeTime{TIME_CHAIN=0, TIME_SHAKE, TIME_CHI, TIME_RAMA, TIME_VEXCLUDED, TIME_DSSP, TIME_PAP, 
-  					TIME_WATER, TIME_BURIAL, TIME_HELIX, TIME_AMHGO, TIME_FRAGMEM, TIME_VFRAGMEM, TIME_SSB, TIME_N};
-  
+  enum ComputeTime{TIME_CHAIN=0, TIME_SHAKE, TIME_CHI, TIME_RAMA, TIME_VEXCLUDED, TIME_DSSP, TIME_PAP,
+            TIME_WATER, TIME_BURIAL, TIME_HELIX, TIME_AMHGO, TIME_FRAGMEM, TIME_VFRAGMEM, TIME_SSB, TIME_N};
+
  private:
   void compute_backbone();
   void compute_chain_potential(int i);
@@ -218,7 +218,7 @@ public:
   inline double anti_one(int res);
   inline double get_water_gamma(int i_resno, int j_resno, int i_well, int ires_type, int jres_type, int local_dens);
   inline double get_burial_gamma(int i_resno, int irestype, int local_dens);
-  
+
   inline void print_log(char *line);
   void final_log_output();
   Fragment_Memory **read_mems(char *mems_file, int &n_mems);
@@ -226,7 +226,7 @@ public:
   char *ltrim(char *s);
   char *rtrim(char *s);
   char *trim(char *s);
-  
+
   void timerBegin();
   void timerEnd(int which);
 
@@ -234,16 +234,16 @@ public:
   cR<double, FixBackbone> *R;
   cWell<double, FixBackbone> *well;
   cWell<double, FixBackbone> *helix_well;
-  
+
   WPV water_par;
   WPV helix_par;
-  
+
   FILE *efile;
-  
+
   FILE *dout;
   int sStep, eStep;
   void print_forces(int coord=0);
-  
+
   class AtomVecAWSEM *avec;
 
 /*  double tmpforce1[1000][3];
